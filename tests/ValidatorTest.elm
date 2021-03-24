@@ -2,7 +2,7 @@ module ValidatorTest exposing (..)
 
 import Expect
 import Test exposing (Test, describe, test)
-import Validator exposing (Validator)
+import Validator
 
 
 suite : Test
