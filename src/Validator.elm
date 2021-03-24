@@ -2,14 +2,14 @@ module Validator exposing
     ( Validator, run
     , map, map2
     , andMap, andThen
-    , custom, succeed, fail
+    , succeed, fail, custom
     , required, optional
     )
 
 {-|
 
 
-# Definiion
+# Definition
 
 @docs Validator, run
 
@@ -18,9 +18,15 @@ module Validator exposing
 
 @docs map, map2
 
+
+# Applicative
+
 @docs andMap, andThen
 
-@docs custom, succeed, fail
+@docs succeed, fail, custom
+
+
+# Compose
 
 @docs required, optional
 

@@ -1,4 +1,4 @@
-module ValidatorTest exposing (..)
+module ValidatorTest exposing (suite)
 
 import Expect
 import Test exposing (Test, describe, test)
