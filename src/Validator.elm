@@ -81,7 +81,7 @@ map2 f (Validator g) (Validator h) =
     Validator (\x -> Result.map2 f (g x) (h x))
 
 
-{-| Apply wrapped function on to another wrapped value
+{-| Apply wrapped function over another wrapped value
 -}
 andMap : Validator a e b -> Validator a e (b -> c) -> Validator a e c
 andMap =
@@ -104,28 +104,28 @@ andThen f g =
 {-| Combine validators with required field
 -}
 required : (a -> b) -> (b -> Bool) -> e -> Validator b e c -> Validator a e (c -> d) -> Validator a e d
-required accessor isEmpty err (Validator f) (Validator h) =
+required accessor isEmpty err (Validator f) (Validator g) =
     Validator
         (\x ->
             x
                 |> (predicateMaybe isEmpty << accessor)
                 |> Result.fromMaybe [ err ]
                 |> Result.andThen f
-                |> applyResults (h x)
+                |> applyResults (g x)
         )
 
 
 {-| Combine validators with optional field
 -}
 optional : (a -> b) -> (b -> Bool) -> c -> Validator b e c -> Validator a e (c -> d) -> Validator a e d
-optional accessor isEmpty default (Validator f) (Validator h) =
+optional accessor isEmpty default (Validator f) (Validator g) =
     Validator
         (\x ->
             x
                 |> (predicateMaybe isEmpty << accessor)
                 |> Maybe.map f
-                |> Maybe.map (applyResults (h x))
-                |> Maybe.withDefault (applyResults (h x) (Ok default))
+                |> Maybe.map (applyResults (g x))
+                |> Maybe.withDefault (applyResults (g x) (Ok default))
         )
 
 
