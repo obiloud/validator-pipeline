@@ -246,7 +246,6 @@ required accessor isEmpty err (Validator f) (Validator g) =
     intValidator =
         Validator.custom (String.toInt >> Result.fromMaybe [ "Not a number" ])
 
-
     type alias FormValues r =
         { r
             | name : String
