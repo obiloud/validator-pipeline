@@ -1,6 +1,6 @@
 {
     "type": "package",
-    "name": "obiloud/form-validator-pipeline",
+    "name": "obiloud/validator-pipeline",
     "summary": "Build custom form validators and combine results",
     "license": "BSD-2-Clause",
     "version": "1.0.0",
