@@ -41,9 +41,9 @@ parseEmail str =
         Err "Invalid email"
 
 
-emailValidator : String -> Validator String (String, String) Email
-emailValidator fieldName =
-    Validator.custom (parseEmail >> Result.mapError (Tuple.pair fieldName >> List.singleton))
+emailValidator : Validator String (String, String) Email
+emailValidator =
+    Validator.custom (parseEmail >> Result.mapError (Tuple.pair "email" >> List.singleton))
 
 
 intValidator : String -> Validator String (String, String) Int
@@ -63,7 +63,7 @@ userValidator =
     Validator.succeed User
         |> Validator.required .name String.isEmpty ("name", "Name is required") (Validator.custom Ok)
         |> Validator.optional .age String.isEmpty 10 (intValidator "age")
-        |> Validator.required .email String.isEmpty ("email", "Email is required") (emailValidator "email")
+        |> Validator.required .email String.isEmpty ("email", "Email is required") emailValidator
 
 
 model : FormValues
