@@ -16,7 +16,7 @@ Library is very flexibile and leaves implementation of the custom validator to t
 
 ## Examples
 
-Example validating a record with form values.
+### Validating a record.
 
 ```elm
 import Dict exposing (Dict)
@@ -90,5 +90,87 @@ Dict.get "age" validationErrors --> Nothing
 
 
 Dict.get "email" validationErrors --> (Just "Invalid email")
+```
+
+### Validating a dict.
+
+```elm
+import Dict exposing (Dict)
+import Validator exposing (Validator)
+
+
+type alias User =
+    { name : String
+    , age : Int
+    , email : Email
+    }
+
+
+type Email = Email String
+
+
+parseEmail : String -> Result String Email
+parseEmail str =
+    if String.contains "@" str then
+        Ok (Email str)
+    else
+        Err "Invalid email"
+
+
+maybeEmailValidator : String -> Validator (Maybe String) (String, String) Email
+maybeEmailValidator fieldName =
+    Validator.custom(Result.fromMaybe [ ( fieldName, "Email must be a string" ) ])
+        |> Validator.andThen 
+            (\str -> 
+                case parseEmail str of
+                    Ok email ->
+                        Validator.succeed email
+                    Err reason -> 
+                        Validator.fail ( fieldName, reason )
+            )
         
+
+
+maybeIntValidator : String -> Validator (Maybe String) (String, String) Int
+maybeIntValidator fieldName =
+    Validator.custom(Result.fromMaybe [ ( fieldName, "Must contain digits" ) ])
+        |> Validator.andThen (String.toInt >> Maybe.map Validator.succeed >> Maybe.withDefault (Validator.fail ( fieldName,  "Not a number" )))
+
+
+type alias FormValues =
+    Dict String String
+
+
+userValidator : Validator FormValues (String, String) User
+userValidator =
+    Validator.succeed User
+        |> Validator.required (Dict.get "name") ((==) Nothing) ("name", "Name is required") (Validator.custom (Result.fromMaybe [("name", "Name is required")]))
+        |> Validator.optional (Dict.get "age") ((==) Nothing) 10 (maybeIntValidator "age")
+        |> Validator.required (Dict.get "email") ((==) Nothing) ("email", "Email is required") (maybeEmailValidator "email")
+
+
+model : FormValues
+model =
+    Dict.fromList
+        [ ("name", "John Doe")
+        , ("email",  "wrong address")
+        ]
+
+
+validationErrors : Dict String String
+validationErrors =
+    case Validator.run userValidator model of 
+        Ok _ ->
+            Dict.empty
+        Err errs ->
+            Dict.fromList errs
+       
+
+Dict.get "name" validationErrors --> Nothing
+
+
+Dict.get "age" validationErrors --> Nothing
+
+
+Dict.get "email" validationErrors --> (Just "Invalid email")
 ```
