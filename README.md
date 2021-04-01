@@ -1,7 +1,7 @@
 # validator-pipeline
 Build custom validators of a user input. Combine validatiors of multiple input fields with `(|>)` operator.
 
-## Why yet another validator package?
+## Yet another validator
 Form validation is very common and there is already number of different libraries to choose from: 
 * [arowM/elm-from-validator](https://package.elm-lang.org/packages/arowM/elm-form-validator/latest/)
 * [etaque/elm-form](https://package.elm-lang.org/packages/etaque/elm-form/latest/)
@@ -9,7 +9,7 @@ Form validation is very common and there is already number of different librarie
 * [jaredramirez/elm-field](https://package.elm-lang.org/packages/jaredramirez/elm-field/latest/)
 * [Bastes/the-validator](https://package.elm-lang.org/packages/Bastes/the-validator/latest/)
 
-What sets this library appart from others is intuitive interface for working with optional fields.
+What sets this library apart from others is its intuitive interface for working with optional fields.
 It is not enough to simply leave certain fields unchecked. This library exposes interface to provide default value if optional field is empty but validate the same field otherwise.
 
 Library is very flexibile and leaves implementation of the custom validator to the developer. Validation is decoupled from any kind of representation and can be used both inside the view function and in the update function.
